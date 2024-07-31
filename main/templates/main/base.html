@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Richblack</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #343a40;
+            color: #fff;
+            position: fixed;
+        }
+        .sidebar a {
+            color: #fff;
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background: #495057;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="text-center py-4">Richblack</h2>
+        <a href="/"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/purchases"><i class="fas fa-shopping-cart"></i> Purchases</a>
+        <a href="/stock"><i class="fas fa-warehouse"></i> Stock</a>
+        <a href="/employees"><i class="fas fa-users"></i> Employees</a>
+        <a href="/finance"><i class="fas fa-dollar-sign"></i> Finance</a>
+        <a href="/sales"><i class="fas fa-chart-line"></i> Sales</a>
+        <a href="/system-management"><i class="fas fa-cogs"></i> System Management</a>
+        <a href="/settings"><i class="fas fa-sliders-h"></i> Settings</a>
+    </div>
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h1>Branches</h1>
+<a href="{% url 'branch_create' %}" class="btn btn-primary mb-3">Add Branch</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Address</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for branch in branches %}
+        <tr>
+            <td>{{ branch.id }}</td>
+            <td>{{ branch.branch_name }}</td>
+            <td>{{ branch.branch_code }}</td>
+            <td>{{ branch.address }}</td>
+            <td>{{ branch.phone_number }}</td>
+            <td>
+                <a href="{% url 'branch_detail' branch.id %}" class="btn btn-info">View</a>
+                <a href="{% url 'branch_update' branch.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'branch_delete' branch.id %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

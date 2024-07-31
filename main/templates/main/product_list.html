@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>Products</h2>
+<a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Unit of Measure</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.product_name }}</td>
+            <td>{{ product.category.category_name }}</td>
+            <td>{{ product.unit_of_measure.unit_name }}</td>
+            <td>{{ product.price }}</td>
+            <td>
+                <a href="{% url 'product_update' product.id %}" class="btn btn-info">Edit</a>
+                <a href="{% url 'product_delete' product.id %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h1>Branch Detail</h1>
+<table class="table table-striped">
+    <tr>
+        <th>ID</th>
+        <td>{{ branch.id }}</td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td>{{ branch.branch_name }}</td>
+    </tr>
+    <tr>
+        <th>Code</th>
+        <td>{{ branch.branch_code }}</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>{{ branch.address }}</td>
+    </tr>
+    <tr>
+        <th>Phone Number</th>
+        <td>{{ branch.phone_number }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ branch.email }}</td>
+    </tr>
+    <tr>
+        <th>Manager Name</th>
+        <td>{{ branch.manager_name }}</td>
+    </tr>
+    <tr>
+        <th>Opening Date</th>
+        <td>{{ branch.opening_date }}</td>
+    </tr>
+    <tr>
+        <th>Operating Hours</th>
+        <td>{{ branch.operating_hours }}</td>
+    </tr>
+    <tr>
+        <th>Budget</th>
+        <td>{{ branch.budget }}</td>
+    </tr>
+    <tr>
+        <th>Revenue</th>
+        <td>{{ branch.revenue }}</td>
+    </tr>
+    <tr>
+        <th>Number of Employees</th>
+        <td>{{ branch.number_of_employees }}</td>
+    </tr>
+    <tr>
+        <th>Services Offered</th>
+        <td>{{ branch.services_offered }}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>{{ branch.status }}</td>
+    </tr>
+</table>
+<a href="{% url 'branch_list' %}" class="btn btn-secondary">Back to Branches</a>
+{% endblock %}

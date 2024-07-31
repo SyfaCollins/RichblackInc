@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h1>Purchase Detail</h1>
+
+<table class="table table-striped">
+    <tr>
+        <th>ID</th>
+        <td>{{ purchase.id }}</td>
+    </tr>
+    <tr>
+        <th>Date</th>
+        <td>{{ purchase.date }}</td>
+    </tr>
+    <tr>
+        <th>Supplier</th>
+        <td>{{ purchase.supplier }}</td>
+    </tr>
+    <tr>
+        <th>Total Amount</th>
+        <td>{{ purchase.total_amount }}</td>
+    </tr>
+    <!-- Add more fields as necessary -->
+</table>
+
+<a href="{% url 'purchase_list' %}" class="btn btn-secondary">Back to Purchases</a>
+{% endblock %}
