@@ -1,15 +1,27 @@
 from django import forms
 from .models import *
 
-class PurchaseForm(forms.ModelForm):
+# products form
+
+class ProductForm(forms.ModelForm):
     class Meta:
-        model = Purchase
+        model = Product
         fields = '__all__'
 
-class PurchaseFilterForm(forms.Form):
-    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-    supplier = forms.CharField(max_length=100, required=False)
+class ProductFilterForm(forms.Form):
+    name = forms.CharField(required=False)
+    category = forms.ModelChoiceField(queryset=ProductCategory.objects.all(), required=False)
+    supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), required=False)
+
+# class PurchaseForm(forms.ModelForm):
+#     class Meta:
+#         model = Purchase
+#         fields = '__all__'
+
+# class PurchaseFilterForm(forms.Form):
+#     start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+#     end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+#     supplier = forms.CharField(max_length=100, required=False)
 
 
 #Branches form

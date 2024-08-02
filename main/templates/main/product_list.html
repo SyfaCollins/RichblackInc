@@ -1,30 +1,39 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h2>Products</h2>
-<a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
+<h1>Products</h1>
+<form method="get">
+    {{ filter_form.as_p }}
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+<a href="{% url 'product_create' %}" class="btn btn-primary mb-3">Add Product</a>
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Product Name</th>
+            <th>Name</th>
             <th>Category</th>
-            <th>Unit of Measure</th>
             <th>Price</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Supplier</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for product in products %}
         <tr>
-            <td>{{ product.id }}</td>
-            <td>{{ product.product_name }}</td>
-            <td>{{ product.category.category_name }}</td>
-            <td>{{ product.unit_of_measure.unit_name }}</td>
+            <td>{{ product.product_id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.category }}</td>
             <td>{{ product.price }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.unit }}</td>
+            <td>{{ product.supplier }}</td>
             <td>
-                <a href="{% url 'product_update' product.id %}" class="btn btn-info">Edit</a>
-                <a href="{% url 'product_delete' product.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'product_detail' product.pk %}" class="btn btn-info">View</a>
+                <a href="{% url 'product_update' product.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}
