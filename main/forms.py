@@ -1,6 +1,20 @@
 from django import forms
 from .models import *
 
+
+#product Category
+
+class ProductCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'
+        
+        
+# class ProductCategoryFilterForm(forms.Form):
+#     name = forms.CharField(required=False)
+#     category = forms.CharField(required=False)
+#     description = forms.ModelChoiceField(queryset=Supplier.objects.all(), required=False)
+
 # products form
 
 class ProductForm(forms.ModelForm):
@@ -12,16 +26,24 @@ class ProductFilterForm(forms.Form):
     name = forms.CharField(required=False)
     category = forms.ModelChoiceField(queryset=ProductCategory.objects.all(), required=False)
     supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), required=False)
+    
+    
+# Stock Management
 
-# class PurchaseForm(forms.ModelForm):
-#     class Meta:
-#         model = Purchase
-#         fields = '__all__'
+class StockTransferForm(forms.ModelForm):
+    class Meta:
+        model = StockTransfer
+        fields = ['product', 'from_branch', 'to_branch', 'quantity']
 
-# class PurchaseFilterForm(forms.Form):
-#     start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-#     end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-#     supplier = forms.CharField(max_length=100, required=False)
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        fields = '__all__'
+
+class PurchaseFilterForm(forms.Form):
+    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    supplier = forms.CharField(max_length=100, required=False)
 
 
 #Branches form
@@ -33,6 +55,14 @@ class BranchForm(forms.ModelForm):
         
         
         
+        
+# Sales
+
+class SaleForm(forms.ModelForm):
+    class Meta:
+        model = Sale
+        fields = ['product', 'branch', 'quantity', 'sale_price']
+
 #Employees form
 
 class EmployeeForm(forms.ModelForm):

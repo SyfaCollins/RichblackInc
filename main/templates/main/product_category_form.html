@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>New Product Category</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
+<a href="{% url 'product_category_list' %}" class="btn btn-secondary">Cancel</a>
+{% endblock %}

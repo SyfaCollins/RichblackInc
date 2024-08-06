@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>Sales</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Branch</th>
+            <th>Quantity</th>
+            <th>Sale Price</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale in sales %}
+        <tr>
+            <td>{{ sale.product.name }}</td>
+            <td>{{ sale.branch.branch_name }}</td>
+            <td>{{ sale.quantity }}</td>
+            <td>{{ sale.sale_price }}</td>
+            <td>{{ sale.sale_date }}</td>
+            <td>
+                <a href="{% url 'sale_detail' sale.pk %}" class="btn btn-info">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'sale_create' %}" class="btn btn-primary">New Sale</a>
+{% endblock %}

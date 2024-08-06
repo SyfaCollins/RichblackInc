@@ -10,6 +10,10 @@ from django.db.models import Q
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
+from django.db import transaction
+
+
 
 
 
@@ -57,7 +61,25 @@ def dashboard(request):
 # Add other views as needed
 
 #Product Views
+# @login_required
+
+
 @login_required
+def product_category_list(request):
+    categories = ProductCategory.objects.all()
+    return render(request, 'main/product_category_list.html', {'categories': categories})
+
+@login_required
+def product_category_create(request):
+    if request.method == 'POST':
+        form = ProductCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_category_list')
+    else:
+        form = ProductCategoryForm()
+    return render(request, 'main/product_category_form.html', {'form': form})
+
 def product_list(request):
     products = Product.objects.all()
     filter_form = ProductFilterForm(request.GET)
@@ -70,10 +92,15 @@ def product_list(request):
             products = products.filter(supplier=filter_form.cleaned_data['supplier'])
     return render(request, 'main/product_list.html', {'products': products, 'filter_form': filter_form})
 
+
+
+
+@login_required
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'main/product_detail.html', {'product': product})
 
+@login_required
 def product_create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
@@ -141,6 +168,94 @@ def branch_delete(request, pk):
         return redirect('branch_list')
     return render(request, 'main/branch_confirm_delete.html', {'branch': branch})
 
+# Stock Management
+def transfer_create(request):
+    if request.method == 'POST':
+        form = StockTransferForm(request.POST)
+        if form.is_valid():
+            transfer = form.save(commit=False)
+            with transaction.atomic():
+                # Decrease stock from the source branch
+                source_stock = Stock.objects.get(product=transfer.product, branch=transfer.from_branch)
+                if source_stock.quantity >= transfer.quantity:
+                    source_stock.quantity = F('quantity') - transfer.quantity
+                    source_stock.save()
+                    
+                    # Increase stock in the destination branch
+                    dest_stock, created = Stock.objects.get_or_create(product=transfer.product, branch=transfer.to_branch)
+                    dest_stock.quantity = F('quantity') + transfer.quantity
+                    dest_stock.save()
+
+                    transfer.save()
+                    return redirect('transfer_list')
+                else:
+                    form.add_error('quantity', 'Not enough stock in the source branch.')
+    else:
+        form = StockTransferForm()
+    return render(request, 'main/transfer_form.html', {'form': form})
+
+@login_required
+def transfer_list(request):
+    transfers = StockTransfer.objects.all()
+    return render(request, 'main/transfer_list.html', {'transfers': transfers})
+
+@login_required
+def transfer_detail(request, pk):
+    transfer = get_object_or_404(StockTransfer, pk=pk)
+    return render(request, 'main/transfer_detail.html', {'transfer': transfer})
+
+@login_required
+def transfer_create(request):
+    if request.method == 'POST':
+        form = StockTransferForm(request.POST)
+        if form.is_valid():
+            transfer = form.save(commit=False)
+            # Update stock quantities
+            transfer.from_branch.stock_set.filter(product=transfer.product).update(quantity=F('quantity') - transfer.quantity)
+            transfer.to_branch.stock_set.filter(product=transfer.product).update(quantity=F('quantity') + transfer.quantity)
+            transfer.save()
+            return redirect('transfer_list')
+    else:
+        form = StockTransferForm()
+    return render(request, 'main/transfer_form.html', {'form': form})
+
+# Sales Views
+
+@login_required
+def sale_list(request):
+    sales = Sale.objects.all()
+    return render(request, 'main/sale_list.html', {'sales': sales})
+
+@login_required
+def sale_detail(request, pk):
+    sale = get_object_or_404(Sale, pk=pk)
+    return render(request, 'main/sale_detail.html', {'sale': sale})
+@login_required
+def sale_create(request):
+    if request.method == 'POST':
+        form = SaleForm(request.POST)
+        if form.is_valid():
+            sale = form.save(commit=False)
+            with transaction.atomic():
+                # Ensure stock entry exists for the branch and product
+                stock, created = Stock.objects.get_or_create(
+                    product=sale.product,
+                    branch=sale.branch,
+                    defaults={'quantity': 0}
+                )
+
+                if stock.quantity >= sale.quantity:
+                    # Decrease stock from the branch
+                    stock.quantity = F('quantity') - sale.quantity
+                    stock.save()
+                    sale.save()
+                    return redirect('sale_list')
+                else:
+                    form.add_error('quantity', 'Not enough stock in the branch.')
+    else:
+        form = SaleForm()
+    return render(request, 'main/sale_form.html', {'form': form})
+
 # Employees views
 def employee_list(request):
     employees = Employee.objects.all()
@@ -191,41 +306,45 @@ def employee_delete(request, pk):
 
 # # Purchases
 
-# def purchase_list(request):
-#     form = PurchaseFilterForm(request.GET or None)
-#     purchases = Purchase.objects.all()
+def purchase_list(request):
+    form = PurchaseFilterForm(request.GET or None)
+    purchases = Purchase.objects.all()
 
-#     if form.is_valid():
-#         if form.cleaned_data['start_date']:
-#             purchases = purchases.filter(date__gte=form.cleaned_data['start_date'])
-#         if form.cleaned_data['end_date']:
-#             purchases = purchases.filter(date__lte=form.cleaned_data['end_date'])
-#         if form.cleaned_data['supplier']:
-#             purchases = purchases.filter(supplier__icontains=form.cleaned_data['supplier'])
+    if form.is_valid():
+        if form.cleaned_data['start_date']:
+            purchases = purchases.filter(date__gte=form.cleaned_data['start_date'])
+        if form.cleaned_data['end_date']:
+            purchases = purchases.filter(date__lte=form.cleaned_data['end_date'])
+        if form.cleaned_data['supplier']:
+            purchases = purchases.filter(supplier__icontains=form.cleaned_data['supplier'])
 
-#     context = {
-#         'purchases': purchases,
-#         'form': form,
-#     }
-#     return render(request, 'main/purchase_list.html', context)
+    context = {
+        'purchases': purchases,
+        'form': form,
+    }
+    return render(request, 'main/purchase_list.html', context)
 
-# def purchase_detail(request, pk):
-#     purchase = get_object_or_404(Purchase, pk=pk)
-#     return render(request, 'main/purchase_detail.html', {'purchase': purchase})
+def purchase_detail(request, pk):
+    purchase = get_object_or_404(Purchase, pk=pk)
+    return render(request, 'main/purchase_detail.html', {'purchase': purchase})
 
-# def purchase_create(request):
-#     if request.method == 'POST':
-#         form = PurchaseForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('purchase_list')
-#     else:
-#         form = PurchaseForm()
-#     return render(request, 'main/purchase_form.html', {'form': form})
+@login_required
+def purchase_create(request):
+    if request.method == 'POST':
+        form = PurchaseForm(request.POST)
+        if form.is_valid():
+            purchase = form.save()
+            return redirect('purchase_list')
+    else:
+        form = PurchaseForm()
+    return render(request, 'main/purchase_form.html', {'form': form})
 
-# def purchase_delete(request, pk):
-#     purchase = get_object_or_404(Purchase, pk=pk)
-#     if request.method == 'POST':
-#         purchase.delete()
-#         return redirect('purchase_list')
-#     return render(request, 'main/purchase_confirm_delete.html', {'purchase': purchase})
+
+def purchase_delete(request, pk):
+    purchase = get_object_or_404(Purchase, pk=pk)
+    if request.method == 'POST':
+        purchase.delete()
+        return redirect('purchase_list')
+    return render(request, 'main/purchase_confirm_delete.html', {'purchase': purchase})
+
+

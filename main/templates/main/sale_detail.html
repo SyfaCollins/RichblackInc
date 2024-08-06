@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>Sale Details</h2>
+<p><strong>Product:</strong> {{ sale.product.name }}</p>
+<p><strong>Branch:</strong> {{ sale.branch.branch_name }}</p>
+<p><strong>Quantity:</strong> {{ sale.quantity }}</p>
+<p><strong>Sale Price:</strong> {{ sale.sale_price }}</p>
+<p><strong>Date:</strong> {{ sale.sale_date }}</p>
+<a href="{% url 'sale_list' %}" class="btn btn-secondary">Back to List</a>
+{% endblock %}

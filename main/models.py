@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # Create your models here.
 
@@ -24,19 +27,34 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField()
-    unit = models.CharField(max_length=50)
+    stock_quantity = models.IntegerField()
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.name
+    
+
+
+class Purchase(models.Model):
+    purchase_id = models.AutoField(primary_key=True)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    purchase_date = models.DateField()
+    supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        
+        return f"Purchase {self.purchase_id} of {self.product.name}"
 
 
 class Branch(models.Model):
     branch_name = models.CharField(max_length=255)
     branch_code = models.CharField(max_length=50, unique=True, default='DEFAULT_CODE')
     address = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=20)
+    contact_info = models.CharField(max_length=20)
     email = models.EmailField()
     manager_name = models.CharField(max_length=255)
     opening_date = models.DateField()
@@ -50,8 +68,62 @@ class Branch(models.Model):
     def __str__(self):
         return self.branch_name
     
-from django.db import models
+    
+    
+class Stock(models.Model):
+    stock_id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
 
+    class Meta:
+        unique_together = ('product', 'branch')
+
+    def __str__(self):
+        return f"{self.product.name} in {self.branch.branch_name}"
+    
+class StockTransfer(models.Model):
+    transfer_id = models.AutoField(primary_key=True)
+    from_branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='outgoing_transfers')
+    to_branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='incoming_transfers')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    transfer_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Transfer {self.transfer_id} of {self.product.name} from {self.from_branch.branch_name} to {self.to_branch.branch_name}"
+
+    
+    
+@receiver(post_save, sender=Purchase)
+def update_product_stock(sender, instance, **kwargs):
+    product = instance.product
+    product.stock_quantity += instance.quantity
+    product.save()
+
+
+@receiver(post_save, sender=StockTransfer)
+def update_stock_quantities(sender, instance, **kwargs):
+    from_branch_stock = Stock.objects.get(branch=instance.from_branch, product=instance.product)
+    to_branch_stock, created = Stock.objects.get_or_create(branch=instance.to_branch, product=instance.product)
+
+    # Update quantities
+    from_branch_stock.quantity -= instance.quantity
+    from_branch_stock.save()
+    
+    to_branch_stock.quantity += instance.quantity
+    to_branch_stock.save()    
+    
+class Sale(models.Model):
+    sale_id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Sale of {self.quantity} {self.product.name} at {self.branch.branch_name} on {self.sale_date}"
 
 #employees
 

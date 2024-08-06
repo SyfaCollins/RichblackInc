@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h2>Transfer Details</h2>
+<p><strong>Product:</strong> {{ transfer.product.name }}</p>
+<p><strong>From Branch:</strong> {{ transfer.from_branch.branch_name }}</p>
+<p><strong>To Branch:</strong> {{ transfer.to_branch.branch_name }}</p>
+<p><strong>Quantity:</strong> {{ transfer.quantity }}</p>
+<p><strong>Date:</strong> {{ transfer.transfer_date }}</p>
+<a href="{% url 'transfer_list' %}" class="btn btn-secondary">Back to List</a>
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>Purchases</h1>
+<h2>Purchases</h2>
 
 <form method="get" class="form-inline mb-3">
     <div class="form-group mr-2">
@@ -16,15 +16,17 @@
     <button type="submit" class="btn btn-primary">Filter</button>
 </form>
 
-<a href="{% url 'purchase_create' %}" class="btn btn-primary mb-3">Add Purchase</a>
-
-<table class="table table-striped">
+<table class="table">
     <thead>
         <tr>
             <th>ID</th>
             <th>Date</th>
+            <th>Product</th>
+            <th>Branch</th>
             <th>Supplier</th>
-            <th>Total Amount</th>
+            <th>Quantity</th>
+            <th>Purchase Price</th>
+            <th>Date</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -33,14 +35,19 @@
         <tr>
             <td>{{ purchase.id }}</td>
             <td>{{ purchase.date }}</td>
+            <td>{{ purchase.product.name }}</td>
+            <td>{{ purchase.branch.branch_name }}</td>
             <td>{{ purchase.supplier }}</td>
-            <td>{{ purchase.total_amount }}</td>
+            <td>{{ purchase.quantity }}</td>
+            <td>{{ purchase.purchase_price }}</td>
+            <td>{{ purchase.purchase_date }}</td>
             <td>
-                <a href="{% url 'purchase_detail' purchase.id %}" class="btn btn-info">View</a>
-                <a href="{% url 'purchase_delete' purchase.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'purchase_detail' purchase.pk %}" class="btn btn-info">View</a>
+                
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<a href="{% url 'purchase_create' %}" class="btn btn-primary">New Purchase</a>
 {% endblock %}

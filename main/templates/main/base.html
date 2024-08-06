@@ -13,8 +13,8 @@
         .sidebar {
             width: 250px;
             height: 100vh;
-            background: #343a40;
-            color: #fff;
+            background: #7eb2e7;
+            color: #000000;
             position: fixed;
         }
         .sidebar a {
@@ -34,16 +34,29 @@
     </style>
 </head>
 <body>
+   
+    
     <div class="sidebar">
         <h2 class="text-center py-4">Richblack</h2>
         <a href="/"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="/purchases"><i class="fas fa-shopping-cart"></i> Purchases</a>
-        <a href="/stock"><i class="fas fa-warehouse"></i> Stock</a>
+        <a href="/transfers"><i class="fas fa-warehouse"></i> Stock</a>
         <a href="/employees"><i class="fas fa-users"></i> Employees</a>
         <a href="/finance"><i class="fas fa-dollar-sign"></i> Finance</a>
         <a href="/sales"><i class="fas fa-chart-line"></i> Sales</a>
         <a href="/system-management"><i class="fas fa-cogs"></i> System Management</a>
+        <a href="/products"><i class=""></i>Product</a>
+        <a href="/product_category"><i class=""></i>product category</a>
+        <a href="/branches"><i class=""></i>branches</a>
+        <a href="/"><i class=""></i>Suppliers</a>
+        <a href="/"><i class=""></i>Customers</a>
+
+
+
         <a href="/settings"><i class="fas fa-sliders-h"></i> Settings</a>
+    </div>
+    <div class="topbar">
+        <input type="submit" value="logout">
     </div>
     <div class="content">
         {% block content %}
