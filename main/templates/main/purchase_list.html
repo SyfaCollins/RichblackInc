@@ -22,27 +22,32 @@
             <th>ID</th>
             <th>Date</th>
             <th>Product</th>
-            <th>Branch</th>
             <th>Supplier</th>
             <th>Quantity</th>
             <th>Purchase Price</th>
-            <th>Date</th>
+            <th>Unit Price</th>
+
+          
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for purchase in purchases %}
         <tr>
-            <td>{{ purchase.id }}</td>
-            <td>{{ purchase.date }}</td>
+            <td>{{ purchase.purchase_id }}</td>
+            <td>{{ purchase.purchase_date }}</td>
             <td>{{ purchase.product.name }}</td>
-            <td>{{ purchase.branch.branch_name }}</td>
             <td>{{ purchase.supplier }}</td>
             <td>{{ purchase.quantity }}</td>
-            <td>{{ purchase.purchase_price }}</td>
-            <td>{{ purchase.purchase_date }}</td>
+            <td>{{ purchase.price }}</td>
+            <td>{{ purchase.unit_price }}</td>
+
+            
             <td>
                 <a href="{% url 'purchase_detail' purchase.pk %}" class="btn btn-info">View</a>
+                <a href="{% url 'purchase_update' purchase.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'purchase_delete' purchase.pk %}" class="btn btn-danger">Delete</a>
+      
                 
             </td>
         </tr>

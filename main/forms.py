@@ -62,6 +62,12 @@ class SaleForm(forms.ModelForm):
     class Meta:
         model = Sale
         fields = ['product', 'branch', 'quantity', 'sale_price']
+        
+class SupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = '__all__'
+
 
 #Employees form
 
@@ -75,3 +81,5 @@ class EmployeeFilterForm(forms.Form):
     last_name = forms.CharField(required=False)
     branch = forms.ModelChoiceField(queryset=Branch.objects.all(), required=False)
     status = forms.ChoiceField(choices=[('active', 'Active'), ('inactive', 'Inactive')], required=False)
+    
+    

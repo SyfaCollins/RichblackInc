@@ -3,12 +3,20 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+
+
 # Create your models here.
 
 class Supplier(models.Model):
+    supplier_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    contact_info = models.CharField(max_length=255)
+    contact_info = models.IntegerField()
     address = models.CharField(max_length=255)
+    email_address = models.EmailField()
+    
+    def __str__(self):
+        return self.name
+    
 
 class UnitOfMeasure(models.Model):
     unit_name = models.CharField(max_length=100)
@@ -26,24 +34,23 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
     stock_quantity = models.IntegerField()
-    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-
+   
 
     def __str__(self):
         return self.name
     
 
 
+
 class Purchase(models.Model):
     purchase_id = models.AutoField(primary_key=True)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     quantity = models.IntegerField()
-    purchase_date = models.DateField()
+    purchase_date = models.DateField(auto_now_add=True)
     supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         

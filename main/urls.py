@@ -32,11 +32,20 @@ urlpatterns = [
   path('sales/<int:pk>/', views.sale_detail, name='sale_detail'),
   path('sales/new/', views.sale_create, name='sale_create'),
   
+  # Supplier
+  
+  path('supplier/', views.supplier_list, name='supplier_list'),
+  path('supplier/<int:pk>/', views.supplier_detail, name='supplier_detail'),
+  path('supplier/new/', views.supplier_create, name='supplier_create'),
+  path('supplier/<int:pk>/edit/', views.supplier_update, name='supplier_update'),
+  path('supplier/<int:pk>/delete/', views.supplier_delete, name='supplier_delete'),
+  
+  
   path('purchases/', views.purchase_list, name='purchase_list'),
   path('purchases/<int:pk>/', views.purchase_detail, name='purchase_detail'),
+   path('purchases/<int:pk>/edit/', views.purchase_update, name='purchase_update'),
   path('purchases/new/', views.purchase_create, name='purchase_create'),
-  
-  # path('purchases/<int:pk>/delete/', views.purchase_delete, name='purchase_delete'),
+  path('purchases/<int:pk>/delete/', views.purchase_delete, name='purchase_delete'),
   
   path('branches/', views.branch_list, name='branch_list'),
   path('branches/<int:pk>/', views.branch_detail, name='branch_detail'),

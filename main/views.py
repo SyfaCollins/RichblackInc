@@ -49,19 +49,63 @@ def logout_view(request):
 @login_required
 def dashboard(request):
     context = {
-        # 'sales': Sale.objects.all(),
-        # 'purchases': Purchase.objects.all(),
-        # 'stocks': Stock.objects.all(),
+        'sales': Sale.objects.all(),
+        'purchases': Purchase.objects.all(),
+        'stocks': Stock.objects.all(),
         'product' : Product.objects.all(),
         'employees': Employee.objects.all(),
         'financial_transactions': FinancialTransaction.objects.all(),
     }
     return render(request, 'main/dashboard.html', context)
 
-# Add other views as needed
+@login_required
+def supplier_list(request):
+    suppliers = Supplier.objects.all()
+    return render(request,'main/supplier_list.html', {'suppliers':suppliers})
 
-#Product Views
-# @login_required
+@login_required
+def supplier_create(request):
+    if request.method == 'POST':
+        form = SupplierForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('supplier_list')
+    else:
+        form = SupplierForm()
+    return render(request, 'main/supplier_form.html', {'form': form})
+
+def supplier_update(request, pk):
+    supplier = get_object_or_404(Supplier, pk=pk)
+    if request.method == 'POST':
+        form = SupplierForm(request.POST, instance=supplier)
+        if form.is_valid():
+            form.save()
+            return redirect('supplier_list')
+    else:
+        form = SupplierForm(instance=supplier)
+    return render(request, 'main/supplier_form.html', {'form': form})
+
+def supplier_detail(request, pk):
+    supplier = get_object_or_404(Supplier, pk=pk)
+    return render(request, 'main/supplier_detail.html', {'supplier': supplier})
+
+def supplier_delete(request, pk):
+    supplier = get_object_or_404(Supplier, pk=pk)
+    if request.method == 'POST':
+        supplier.delete()
+        return redirect('supplier_list')
+    return render(request, 'main/supplier_confirm_delete.html', {'supplier': supplier})
+
+def branch_delete(request, pk):
+    branch = get_object_or_404(Branch, pk=pk)
+    if request.method == 'POST':
+        branch.delete()
+        return redirect('branch_list')
+    return render(request, 'main/branch_confirm_delete.html', {'branch': branch})
+
+
+     
+    
 
 
 @login_required
@@ -91,7 +135,6 @@ def product_list(request):
         if filter_form.cleaned_data['supplier']:
             products = products.filter(supplier=filter_form.cleaned_data['supplier'])
     return render(request, 'main/product_list.html', {'products': products, 'filter_form': filter_form})
-
 
 
 
@@ -327,6 +370,18 @@ def purchase_list(request):
 def purchase_detail(request, pk):
     purchase = get_object_or_404(Purchase, pk=pk)
     return render(request, 'main/purchase_detail.html', {'purchase': purchase})
+
+
+def purchase_update(request, pk):
+    purchase = get_object_or_404(Purchase, pk=pk)
+    if request.method == 'POST':
+        form = PurchaseForm(request.POST, instance=purchase)
+        if form.is_valid():
+            form.save()
+            return redirect('purchase_list')
+    else:
+        form = PurchaseForm(instance=purchase)
+    return render(request, 'main/purchase_form.html', {'form': form})
 
 @login_required
 def purchase_create(request):

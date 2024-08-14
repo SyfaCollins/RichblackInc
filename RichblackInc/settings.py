@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'RichblackInc.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Richblack_Inc',
+        'NAME': 'test_db',
         'USER': 'root',
         'PASSWORD': 'zeddtedy',
         'HOST': 'localhost',
