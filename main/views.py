@@ -42,7 +42,7 @@ def login_view(request):
     return render(request, 'main/login.html', {'form': form})
 
 def logout_view(request):
-    if request.method == 'POST':
+ 
         logout(request)
         return redirect('login')
 
@@ -124,6 +124,7 @@ def product_category_create(request):
         form = ProductCategoryForm()
     return render(request, 'main/product_category_form.html', {'form': form})
 
+@login_required
 def product_list(request):
     products = Product.objects.all()
     filter_form = ProductFilterForm(request.GET)
@@ -154,6 +155,7 @@ def product_create(request):
         form = ProductForm()
     return render(request, 'main/product_form.html', {'form': form})
 
+@login_required
 def product_update(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -165,6 +167,7 @@ def product_update(request, pk):
         form = ProductForm(instance=product)
     return render(request, 'main/product_form.html', {'form': form})
 
+@login_required
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
