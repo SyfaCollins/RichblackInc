@@ -1,41 +1,57 @@
-{% extends 'main/base.html' %}
+<!-- @format -->
 
-{% block content %}
-<h1>Products</h1>
-<form method="get">
-    {{ filter_form.as_p }}
+{% extends 'main/base.html' %} {% block content %}
+<div class="main-container">
+  <h1>Products</h1>
+  <form method="get">
+    {{ filter_form }}
     <button type="submit" class="btn btn-primary">Filter</button>
-</form>
-<a href="{% url 'product_create' %}" class="btn btn-primary mb-3">Add Product</a>
-<table class="table table-striped">
-    <thead>
+  </form>
+  <div class="table_section">
+    <a href="{% url 'product_create' %}" class="btn btn-primary mb-3"
+      >Add Product</a
+    >
+    <table class="table table-striped">
+      <thead>
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Unit Price</th>
-            <th>Stock Quantity</th>
-            <th>unit_price</th>
-            <th>Supplier</th>
-            <th>Actions</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Unit Price</th>
+          <th>Stock Quantity</th>
+          <th>unit_price</th>
+          <th>Supplier</th>
+          <th>Actions</th>
         </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
         {% for product in products %}
         <tr>
-            <td>{{ product.product_id }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.category }}</td>
-            <td>{{ product.unit_price }}</td>
-            <td>{{ product.stock_quantity }}</td>
-            <td>{{ product.supplier }}</td>
-            <td>
-                <a href="{% url 'product_detail' product.pk %}" class="btn btn-info">View</a>
-                <a href="{% url 'product_update' product.pk %}" class="btn btn-warning">Edit</a>
-                <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger">Delete</a>
-            </td>
+          <td>{{ product.product_id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.category }}</td>
+          <td>{{ product.unit_price }}</td>
+          <td>{{ product.stock_quantity }}</td>
+          <td>{{ product.supplier }}</td>
+          <td>
+            <a href="{% url 'product_detail' product.pk %}" class="btn btn-info"
+              >View</a
+            >
+            <a
+              href="{% url 'product_update' product.pk %}"
+              class="btn btn-warning"
+              >Edit</a
+            >
+            <a
+              href="{% url 'product_delete' product.pk %}"
+              class="btn btn-danger"
+              >Delete</a
+            >
+          </td>
         </tr>
         {% endfor %}
-    </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

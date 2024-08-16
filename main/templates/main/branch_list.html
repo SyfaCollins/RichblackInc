@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>Branches</h1>
+<div class="main-container">
 <a href="{% url 'branch_create' %}" class="btn btn-primary mb-3">Add Branch</a>
 <table class="table table-striped">
     <thead>
@@ -31,4 +31,5 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

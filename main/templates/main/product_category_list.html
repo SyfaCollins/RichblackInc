@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+<div class="main-container">
 <h2>Product Categories</h2>
 <table class="table">
     <thead>
@@ -21,4 +22,5 @@
     </tbody>
 </table>
 <a href="{% url 'product_category_create' %}" class="btn btn-primary">New Category</a>
+</div>
 {% endblock %}

@@ -1,11 +1,14 @@
-{% extends 'main/base.html' %}
+<!-- @format -->
 
-{% block content %}
-<h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Product</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+{% extends 'main/base.html' %} {% block content %}
+<div class="main-container">
+  <h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Product</h1>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Save</button>
-</form>
-<a href="{% url 'product_list' %}" class="btn btn-secondary">Back to Products</a>
-{% endblock %}
+  </form>
+  <a href="{% url 'product_list' %}" class="btn btn-secondary"
+    >Back to Products</a
+  >
+  {% endblock %}
+</div>

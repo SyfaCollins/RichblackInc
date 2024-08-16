@@ -1,0 +1,38 @@
+<!-- templates/purchase/multiple_purchases.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Multiple Purchases</title>
+</head>
+<body>
+    <h1>Create Multiple Purchases</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table>
+            {% for form in formset %}
+                <tr>
+                    <td>{{ form.product.label_tag }}</td>
+                    <td>{{ form.product }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.quantity.label_tag }}</td>
+                    <td>{{ form.quantity }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.unit_price.label_tag }}</td>
+                    <td>{{ form.unit_price }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.branch.label_tag }}</td>
+                    <td>{{ form.branch }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <button type="submit">Save Purchases</button>
+    </form>
+</body>
+</html>

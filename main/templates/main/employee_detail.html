@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+<div class="main-container">
 <h1>Employee Detail</h1>
 <table class="table table-striped">
     <tr>
@@ -53,4 +54,5 @@
     </tr>
 </table>
 <a href="{% url 'employee_list' %}" class="btn btn-secondary">Back to Employees</a>
+</div>
 {% endblock %}

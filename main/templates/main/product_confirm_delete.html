@@ -1,11 +1,12 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h2>Confirm Delete</h2>
+<div class="main-container"><h2>Confirm Delete</h2>
 <p>Are you sure you want to delete {{ product.product_name }}?</p>
 <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Confirm</button>
     <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
 </form>
-{% endblock %}
+{% endblock %}</div>
+
