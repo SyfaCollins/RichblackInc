@@ -1,46 +1,58 @@
-{% extends 'main/base.html' %}
+<!-- @format -->
 
-{% block content %}
+{% extends 'main/base.html' %} {% block content %}
 <div class="main-container">
-<h1>Employees</h1>
-<form method="get">
-    {{ filter_form.as_p }}
+  <h1>Employees</h1>
+  <form method="get">
+    {{ filter_form }}
     <button type="submit" class="btn btn-primary">Filter</button>
-</form>
-<a href="{% url 'employee_create' %}" class="btn btn-primary mb-3">Add Employee</a>
-<table class="table table-striped">
+  </form>
+  <a href="{% url 'employee_create' %}" class="btn btn-primary mb-3"
+    >Add Employee</a
+  >
+  <table class="table table-striped">
     <thead>
-        <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Position</th>
-            <th>Branch</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Position</th>
+        <th>Branch</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-        {% for employee in employees %}
-        <tr>
-            <td>{{ employee.employee_id }}</td>
-            <td>{{ employee.first_name }}</td>
-            <td>{{ employee.last_name }}</td>
-            <td>{{ employee.email }}</td>
-            <td>{{ employee.phone_number }}</td>
-            <td>{{ employee.position }}</td>
-            <td>{{ employee.branch }}</td>
-            <td>{{ employee.status }}</td>
-            <td>
-                <a href="{% url 'employee_detail' employee.pk %}" class="btn btn-info">View</a>
-                <a href="{% url 'employee_update' employee.pk %}" class="btn btn-warning">Edit</a>
-                <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
+      {% for employee in employees %}
+      <tr>
+        <td>{{ employee.employee_id }}</td>
+        <td>{{ employee.first_name }}</td>
+        <td>{{ employee.last_name }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.phone_number }}</td>
+        <td>{{ employee.position }}</td>
+        <td>{{ employee.branch }}</td>
+        <td>{{ employee.status }}</td>
+        <td>
+          <a href="{% url 'employee_detail' employee.pk %}" class="btn btn-info"
+            >View</a
+          >
+          <a
+            href="{% url 'employee_update' employee.pk %}"
+            class="btn btn-warning"
+            >Edit</a
+          >
+          <a
+            href="{% url 'employee_delete' employee.pk %}"
+            class="btn btn-danger"
+            >Delete</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
 </div>
 {% endblock %}

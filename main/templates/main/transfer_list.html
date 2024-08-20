@@ -1,32 +1,37 @@
-{% extends 'main/base.html' %}
+<!-- @format -->
 
-{% block content %}
-<h2>Stock Transfers</h2>
-<table class="table">
+{% extends 'main/base.html' %} {% block content %}
+<div class="main-container">
+  <h1>Stock Transfers</h1>
+  <table class="table">
     <thead>
-        <tr>
-            <th>Product</th>
-            <th>From Branch</th>
-            <th>To Branch</th>
-            <th>Quantity</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
+      <tr>
+        <th>Product</th>
+        <th>From Branch</th>
+        <th>To Branch</th>
+        <th>Quantity</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-        {% for transfer in transfers %}
-        <tr>
-            <td>{{ transfer.product.name }}</td>
-            <td>{{ transfer.from_branch.branch_name }}</td>
-            <td>{{ transfer.to_branch.branch_name }}</td>
-            <td>{{ transfer.quantity }}</td>
-            <td>{{ transfer.transfer_date }}</td>
-            <td>
-                <a href="{% url 'transfer_detail' transfer.pk %}" class="btn btn-info">View</a>
-            </td>
-        </tr>
-        {% endfor %}
+      {% for transfer in transfers %}
+      <tr>
+        <td>{{ transfer.product.name }}</td>
+        <td>{{ transfer.from_branch.branch_name }}</td>
+        <td>{{ transfer.to_branch.branch_name }}</td>
+        <td>{{ transfer.quantity }}</td>
+        <td>{{ transfer.transfer_date }}</td>
+        <td>
+          <a href="{% url 'transfer_detail' transfer.pk %}" class="btn btn-info"
+            >View</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
-<a href="{% url 'transfer_create' %}" class="btn btn-primary">New Transfer</a>
+  </table>
+  <a href="{% url 'transfer_create' %}" class="btn btn-primary">New Transfer</a>
+</div>
+
 {% endblock %}

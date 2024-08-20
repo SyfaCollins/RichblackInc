@@ -42,7 +42,7 @@ def login_view(request):
     return render(request, 'main/login.html', {'form': form})
 
 def logout_view(request):
-    if request.method == 'POST':
+ 
         logout(request)
         return redirect('login')
 
@@ -124,6 +124,7 @@ def product_category_create(request):
         form = ProductCategoryForm()
     return render(request, 'main/product_category_form.html', {'form': form})
 
+@login_required
 def product_list(request):
     products = Product.objects.all()
     filter_form = ProductFilterForm(request.GET)
@@ -154,6 +155,7 @@ def product_create(request):
         form = ProductForm()
     return render(request, 'main/product_form.html', {'form': form})
 
+@login_required
 def product_update(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -165,6 +167,7 @@ def product_update(request, pk):
         form = ProductForm(instance=product)
     return render(request, 'main/product_form.html', {'form': form})
 
+@login_required
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -212,30 +215,30 @@ def branch_delete(request, pk):
     return render(request, 'main/branch_confirm_delete.html', {'branch': branch})
 
 # Stock Management
-def transfer_create(request):
-    if request.method == 'POST':
-        form = StockTransferForm(request.POST)
-        if form.is_valid():
-            transfer = form.save(commit=False)
-            with transaction.atomic():
-                # Decrease stock from the source branch
-                source_stock = Stock.objects.get(product=transfer.product, branch=transfer.from_branch)
-                if source_stock.quantity >= transfer.quantity:
-                    source_stock.quantity = F('quantity') - transfer.quantity
-                    source_stock.save()
+# def transfer_create(request):
+#     if request.method == 'POST':
+#         form = StockTransferForm(request.POST)
+#         if form.is_valid():
+#             transfer = form.save(commit=False)
+#             with transaction.atomic():
+#                 # Decrease stock from the source branch
+#                 source_stock = Stock.objects.get(product=transfer.product, branch=transfer.from_branch)
+#                 if source_stock.quantity >= transfer.quantity:
+#                     source_stock.quantity = F('quantity') - transfer.quantity
+#                     source_stock.save()
                     
-                    # Increase stock in the destination branch
-                    dest_stock, created = Stock.objects.get_or_create(product=transfer.product, branch=transfer.to_branch)
-                    dest_stock.quantity = F('quantity') + transfer.quantity
-                    dest_stock.save()
+#                     # Increase stock in the destination branch
+#                     dest_stock, created = Stock.objects.get_or_create(product=transfer.product, branch=transfer.to_branch)
+#                     dest_stock.quantity = F('quantity') + transfer.quantity
+#                     dest_stock.save()
 
-                    transfer.save()
-                    return redirect('transfer_list')
-                else:
-                    form.add_error('quantity', 'Not enough stock in the source branch.')
-    else:
-        form = StockTransferForm()
-    return render(request, 'main/transfer_form.html', {'form': form})
+#                     transfer.save()
+#                     return redirect('transfer_list')
+#                 else:
+#                     form.add_error('quantity', 'Not enough stock in the source branch.')
+#     else:
+#         form = StockTransferForm()
+#     return render(request, 'main/transfer_form.html', {'form': form})
 
 @login_required
 def transfer_list(request):
@@ -274,12 +277,14 @@ def sale_detail(request, pk):
     sale = get_object_or_404(Sale, pk=pk)
     return render(request, 'main/sale_detail.html', {'sale': sale})
 @login_required
+
 def sale_create(request):
     if request.method == 'POST':
         form = SaleForm(request.POST)
         if form.is_valid():
-            sale = form.save(commit=False)
-            with transaction.atomic():
+            sale = form.save(commit=False)  # Don't save to DB yet
+            
+            with transaction.atomic():  # Ensure atomic transaction
                 # Ensure stock entry exists for the branch and product
                 stock, created = Stock.objects.get_or_create(
                     product=sale.product,
@@ -291,15 +296,22 @@ def sale_create(request):
                     # Decrease stock from the branch
                     stock.quantity = F('quantity') - sale.quantity
                     stock.save()
+
+                    # Save the sale record
                     sale.save()
+
+                    # Redirect to the sale list after saving
                     return redirect('sale_list')
                 else:
-                    form.add_error('quantity', 'Not enough stock in the branch.')
+                    # Add error to form if not enough stock
+                    form.add_error('quantity', 'Not enough stock in this branch.')
     else:
         form = SaleForm()
-    return render(request, 'main/sale_form.html', {'form': form})
 
+    # Render the form template with the form context
+    return render(request, 'main/sale_form.html', {'form': form})
 # Employees views
+
 def employee_list(request):
     employees = Employee.objects.all()
     filter_form = EmployeeFilterForm(request.GET)

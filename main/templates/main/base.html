@@ -40,9 +40,26 @@
         padding: 20px;
         width: 100%;
       }
+
+      .topbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 5em;
+        width: 100vw;
+        background: #caced1;
+        color: #7eb2e7;
+        position: fixed;
+        padding: 0 2em;
+      }
     </style>
   </head>
   <body>
+    <div class="topbar">
+      <button class="btn float-right">
+        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+      </button>
+    </div>
     <div class="sidebar">
       <h2 class="text-center py-4">Richblack</h2>
       <a href="/"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
@@ -60,9 +77,7 @@
 
       <a href="/"><i class="fas fa-sliders-h"></i> Settings</a>
     </div>
-    <div class="topbar">
-      <input type="submit" value="logout" />
-    </div>
+
     <div class="content">{% block content %} {% endblock %}</div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

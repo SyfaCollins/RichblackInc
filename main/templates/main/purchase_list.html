@@ -1,58 +1,68 @@
-{% extends 'main/base.html' %}
+<!-- @format -->
 
-{% block content %}
-<h2>Purchases</h2>
+{% extends 'main/base.html' %} {% block content %}
 
-<form method="get" class="form-inline mb-3">
+<div class="main-container">
+  <h1>Purchases</h1>
+
+  <form method="get" class="form-inline mb-3">
     <div class="form-group mr-2">
-        {{ form.start_date.label_tag }} {{ form.start_date }}
+      {{ form.start_date.label_tag }} {{ form.start_date }}
     </div>
     <div class="form-group mr-2">
-        {{ form.end_date.label_tag }} {{ form.end_date }}
+      {{ form.end_date.label_tag }} {{ form.end_date }}
     </div>
     <div class="form-group mr-2">
-        {{ form.supplier.label_tag }} {{ form.supplier }}
+      {{ form.supplier.label_tag }} {{ form.supplier }}
     </div>
     <button type="submit" class="btn btn-primary">Filter</button>
-</form>
+  </form>
 
-<table class="table">
+  <table class="table">
     <thead>
-        <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Product</th>
-            <th>Supplier</th>
-            <th>Quantity</th>
-            <th>Purchase Price</th>
-            <th>Unit Price</th>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Product</th>
+        <th>Supplier</th>
+        <th>Quantity</th>
+        <th>Purchase Price</th>
+        <th>Unit Price</th>
 
-          
-            <th>Actions</th>
-        </tr>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-        {% for purchase in purchases %}
-        <tr>
-            <td>{{ purchase.purchase_id }}</td>
-            <td>{{ purchase.purchase_date }}</td>
-            <td>{{ purchase.product.name }}</td>
-            <td>{{ purchase.supplier }}</td>
-            <td>{{ purchase.quantity }}</td>
-            <td>{{ purchase.price }}</td>
-            <td>{{ purchase.unit_price }}</td>
+      {% for purchase in purchases %}
+      <tr>
+        <td>{{ purchase.purchase_id }}</td>
+        <td>{{ purchase.purchase_date }}</td>
+        <td>{{ purchase.product.name }}</td>
+        <td>{{ purchase.supplier }}</td>
+        <td>{{ purchase.quantity }}</td>
+        <td>{{ purchase.price }}</td>
+        <td>{{ purchase.unit_price }}</td>
 
-            
-            <td>
-                <a href="{% url 'purchase_detail' purchase.pk %}" class="btn btn-info">View</a>
-                <a href="{% url 'purchase_update' purchase.pk %}" class="btn btn-warning">Edit</a>
-                <a href="{% url 'purchase_delete' purchase.pk %}" class="btn btn-danger">Delete</a>
-      
-                
-            </td>
-        </tr>
-        {% endfor %}
+        <td>
+          <a href="{% url 'purchase_detail' purchase.pk %}" class="btn btn-info"
+            >View</a
+          >
+          <a
+            href="{% url 'purchase_update' purchase.pk %}"
+            class="btn btn-warning"
+            >Edit</a
+          >
+          <a
+            href="{% url 'purchase_delete' purchase.pk %}"
+            class="btn btn-danger"
+            >Delete</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
-<a href="{% url 'purchase_create' %}" class="btn btn-primary">New Purchase</a>
+  </table>
+  <a href="{% url 'purchase_create' %}" class="btn btn-primary">New Purchase</a>
+</div>
+
 {% endblock %}
