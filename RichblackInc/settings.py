@@ -82,12 +82,19 @@ WSGI_APPLICATION = 'RichblackInc.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test_db',
-        'USER': 'root',
-        'PASSWORD': 'zeddtedy',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'test_db',
+        # 'USER': 'root',
+        # 'PASSWORD': 'zeddtedy',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306',
+        
+         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Richblack_Inc',
+        'USER': 'syfa',
+        'PASSWORD': 'zeddtedy5265',
+        'HOST': 'myrdshost.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
