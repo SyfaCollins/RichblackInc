@@ -30,7 +30,8 @@ ALLOWED_HOSTS = [
     'richblackinc.c3caw4gsqmo4.eu-west-1.rds.amazonaws.com',
     'localhost',
     '54.229.245.97',
-    'ec2-54-229-245-97.eu-west-1.compute.amazonaws.com'
+    'ec2-54-229-245-97.eu-west-1.compute.amazonaws.com',
+    '54.73.1.240',
 ]
 
 
