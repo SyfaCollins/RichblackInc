@@ -26,7 +26,12 @@ SECRET_KEY = 'django-insecure-twmtie@u03c4nj3jxlec-jrhb-ea#4jvcf#i&w*+d873r8ne8*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['54.76.1.72','localhost']
+=======
+ALLOWED_HOSTS = [ '54.76.1.72', 'localhost'
+]
+>>>>>>> 16e019aacaf0c7b1e2afb5f296deb6fdc25dcadf
 
 
 # Application definition
@@ -38,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'livereload',
     'django.contrib.staticfiles',
 ]
 
@@ -82,6 +86,16 @@ WSGI_APPLICATION = 'RichblackInc.wsgi.application'
 
 DATABASES = {
     'default': {
+<<<<<<< HEAD
+=======
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'test_db',
+        # 'USER': 'root',
+        # 'PASSWORD': 'zeddtedy',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306',
+        
+>>>>>>> 16e019aacaf0c7b1e2afb5f296deb6fdc25dcadf
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'richblackinc',
         'USER': 'syfa',
