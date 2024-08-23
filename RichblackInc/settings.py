@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-twmtie@u03c4nj3jxlec-jrhb-ea#4jvcf#i&w*+d873r8ne8*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['54.76.1.72','localhost']
 
 
 # Application definition
@@ -82,12 +82,12 @@ WSGI_APPLICATION = 'RichblackInc.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test_db',
-        'USER': 'root',
-        'PASSWORD': 'zeddtedy',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'richblackinc',
+        'USER': 'syfa',
+        'PASSWORD': 'richblackinc47',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '',
     }
 }
 
