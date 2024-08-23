@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-twmtie@u03c4nj3jxlec-jrhb-ea#4jvcf#i&w*+d873r8ne8*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ '54.76.1.72', 'localhost'
-]
+ALLOWED_HOSTS = ['54.76.1.72','127.0.0.1']
 
 
 # Application definition
@@ -82,19 +81,12 @@ WSGI_APPLICATION = 'RichblackInc.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'test_db',
-        # 'USER': 'root',
-        # 'PASSWORD': 'zeddtedy',
-        # 'HOST': 'localhost',
-        # 'PORT': '3306',
-        
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'richblackinc',
-        'USER': 'syfa',
+        'USER': 'richblackinc',
         'PASSWORD': 'richblackinc47',
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': 'richblackinc.c3caw4gsqmo4.eu-west-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -149,3 +141,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
+
+
+AWS_ACCESS_KEY_ID = 'AKIAQE43JUTMGLVBRU4R '
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'richblackinc'
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = ' eu-west-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL =  None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' 
