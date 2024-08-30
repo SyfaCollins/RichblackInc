@@ -1,0 +1,46 @@
+/** @format */
+
+h1 {
+  color: green;
+  font-weight: bold;
+}
+
+.flex-container {
+  display: flexbox;
+}
+
+.card h5 {
+  font-weight: bold;
+}
+
+.card-text span {
+  font-weight: bold;
+  font-size: 40px;
+  padding: 1rem;
+}
+
+.card1 {
+  color: #fff;
+  background-color: blue;
+}
+
+.card2 {
+  color: #fff;
+  background-color: green;
+}
+
+.card3 {
+  color: #fff;
+  background-color: grey;
+}
+
+.main-container {
+  display: flexbox;
+  /* background-color: green; */
+  height: auto;
+  padding-top: 5rem;
+}
+
+.table_section {
+  padding-top: 5rem;
+}
