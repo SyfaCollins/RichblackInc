@@ -18,9 +18,9 @@ urlpatterns = [
   path('product_category/new/', views.product_category_create, name='product_category_create'),
   
 # 
-  path('stock/', views.product_list, name='stock_list'),
-  path('stock/<int:pk>/', views.product_detail, name='stock_detail'),
-  path('stock/new/', views.product_create, name='stock_create'),
+  path('stock/', views.transfer_list, name='stock_list'),
+  path('stock/<int:pk>/', views.transfer_detail, name='stock_detail'),
+  path('stock/new/', views.transfer_create, name='stock_create'),
   path('stock/<int:pk>/edit/', views.product_update, name='product_update'),
   path('stock/<int:pk>/delete/', views.product_delete, name='product_delete'),
   
@@ -43,7 +43,7 @@ urlpatterns = [
   
   path('purchases/', views.purchase_list, name='purchase_list'),
   path('purchases/<int:pk>/', views.purchase_detail, name='purchase_detail'),
-   path('purchases/<int:pk>/edit/', views.purchase_update, name='purchase_update'),
+  path('purchases/<int:pk>/edit/', views.purchase_update, name='purchase_update'),
   path('purchases/new/', views.purchase_create, name='purchase_create'),
   path('purchases/<int:pk>/delete/', views.purchase_delete, name='purchase_delete'),
   

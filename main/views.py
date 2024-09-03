@@ -12,6 +12,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.db import transaction
+from django.core.exceptions import ValidationError
+
 
 
 
@@ -304,12 +306,13 @@ def sale_create(request):
                     return redirect('sale_list')
                 else:
                     # Add error to form if not enough stock
-                    form.add_error('quantity', 'Not enough stock in this branch.')
+                    form.add_error('quantity', 'Not enough stock in the branch.')
     else:
         form = SaleForm()
 
     # Render the form template with the form context
     return render(request, 'main/sale_form.html', {'form': form})
+
 # Employees views
 
 def employee_list(request):
