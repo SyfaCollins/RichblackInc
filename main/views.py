@@ -12,7 +12,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.db import transaction
-from django.core.exceptions import ValidationError
+import pandas as pd
+from django.contrib import messages
+from .forms import UploadFileForm
 
 
 
@@ -252,19 +254,64 @@ def transfer_detail(request, pk):
     transfer = get_object_or_404(StockTransfer, pk=pk)
     return render(request, 'main/transfer_detail.html', {'transfer': transfer})
 
+# def transfer_create(request):
+#     if request.method == 'POST':
+#         form = StockTransferForm(request.POST)
+#         if form.is_valid():
+#             transfer = form.save(commit=False)
+#             # Update stock quantities
+#             transfer.from_branch.stock_set.filter(product=transfer.product).update(quantity=F('quantity') - transfer.quantity)
+#             transfer.to_branch.stock_set.filter(product=transfer.product).update(quantity=F('quantity') + transfer.quantity)
+#             transfer.save()
+#             return redirect('transfer_list')
+#     else:
+#         form = StockTransferForm()
+#     return render(request, 'main/transfer_form.html', {'form': form})
+
 @login_required
 def transfer_create(request):
     if request.method == 'POST':
         form = StockTransferForm(request.POST)
         if form.is_valid():
             transfer = form.save(commit=False)
-            # Update stock quantities
-            transfer.from_branch.stock_set.filter(product=transfer.product).update(quantity=F('quantity') - transfer.quantity)
-            transfer.to_branch.stock_set.filter(product=transfer.product).update(quantity=F('quantity') + transfer.quantity)
-            transfer.save()
-            return redirect('transfer_list')
+            
+            # Start a transaction to ensure atomicity
+            with transaction.atomic():
+                # Ensure stock exists for the from_branch and the product
+                from_stock, created = Stock.objects.get_or_create(
+                    product=transfer.product,
+                    branch=transfer.from_branch,
+                    defaults={'quantity': 0}
+                )
+
+                # Check if there's enough stock in the from_branch
+                if from_stock.quantity >= transfer.quantity:
+                    # Reduce stock from the from_branch
+                    from_stock.quantity = F('quantity') - transfer.quantity
+                    from_stock.save()
+
+                    # Ensure stock exists for the to_branch
+                    to_stock, created = Stock.objects.get_or_create(
+                        product=transfer.product,
+                        branch=transfer.to_branch,
+                        defaults={'quantity': 0}
+                    )
+
+                    # Increase stock in the to_branch
+                    to_stock.quantity = F('quantity') + transfer.quantity
+                    to_stock.save()
+
+                    # Save the transfer after updating stock
+                    transfer.save()
+
+                    return redirect('transfer_list')
+                else:
+                    # Not enough stock error
+                    form.add_error('quantity', 'Not enough stock in the source branch.')
+
     else:
         form = StockTransferForm()
+
     return render(request, 'main/transfer_form.html', {'form': form})
 
 # Sales Views
@@ -306,13 +353,12 @@ def sale_create(request):
                     return redirect('sale_list')
                 else:
                     # Add error to form if not enough stock
-                    form.add_error('quantity', 'Not enough stock in the branch.')
+                    form.add_error('quantity', 'Not enough stock in this branch.')
     else:
         form = SaleForm()
 
     # Render the form template with the form context
     return render(request, 'main/sale_form.html', {'form': form})
-
 # Employees views
 
 def employee_list(request):
@@ -398,6 +444,21 @@ def purchase_update(request, pk):
         form = PurchaseForm(instance=purchase)
     return render(request, 'main/purchase_form.html', {'form': form})
 
+def create_multiple_purchases(request):
+    if request.method == 'POST':
+        formset = PurchaseFormSet(request.POST)
+        if formset.is_valid():
+            with transaction.atomic():  # Ensure all purchases are created together
+                for form in formset:
+                    if form.cleaned_data:  # Check that the form has data
+                        purchase = form.save(commit=False)
+                        purchase.save()  # Save each purchase
+            return redirect('purchase_list')  # Redirect to the list of purchases after saving
+    else:
+        formset = PurchaseFormSet()
+
+    return render(request, 'main/multiple_purchases_form.html', {'formset': formset})
+
 @login_required
 def purchase_create(request):
     if request.method == 'POST':
@@ -416,5 +477,45 @@ def purchase_delete(request, pk):
         purchase.delete()
         return redirect('purchase_list')
     return render(request, 'main/purchase_confirm_delete.html', {'purchase': purchase})
+
+
+# Views for file uploads
+
+
+
+def handle_uploaded_file(file):
+    # Read the uploaded Excel file using pandas
+    df = pd.read_excel(file)
+
+    # Loop through the rows in the Excel file and create Purchase objects
+    for index, row in df.iterrows():
+        try:
+            # Assuming columns in Excel are: 'Product', 'Quantity', 'Unit Price', 'Supplier', 'Branch'
+            product = Product.objects.get(name=row['Product'])
+            supplier = Supplier.objects.get(name=row['Supplier'])
+            branch = Branch.objects.get(branch_name=row['Branch'])
+            
+            # Create the purchase
+            Purchase.objects.create(
+                product=product,
+                quantity=row['Quantity'],
+                unit_price=row['Unit Price'],
+                supplier=supplier,
+                branch=branch
+            )
+        except Exception as e:
+            print(f"Error processing row {index}: {e}")
+
+def upload_purchases(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['file'])
+            messages.success(request, 'Purchases uploaded successfully!')
+            return redirect('purchase_list')  # Replace with your actual URL
+    else:
+        form = UploadFileForm()
+    
+    return render(request, 'main/upload_purchases.html', {'form': form})
 
 

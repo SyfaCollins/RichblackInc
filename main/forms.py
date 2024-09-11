@@ -1,5 +1,7 @@
 from django import forms
 from .models import *
+from django.forms import formset_factory
+
 
 
 #product Category
@@ -45,6 +47,8 @@ class PurchaseFilterForm(forms.Form):
     end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
     supplier = forms.CharField(max_length=100, required=False)
 
+PurchaseFormSet = formset_factory(PurchaseForm, extra=5)  # 'extra' defines how many empty forms you want
+
 
 #Branches form
 
@@ -83,3 +87,7 @@ class EmployeeFilterForm(forms.Form):
     status = forms.ChoiceField(choices=[('active', 'Active'), ('inactive', 'Inactive')], required=False)
     
     
+# File upload handling
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

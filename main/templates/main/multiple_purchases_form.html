@@ -1,0 +1,17 @@
+<!-- @format -->
+
+{% extends 'main/base.html' %} {% block content %}
+<div class="main-container">
+  <form method="post">
+    {% csrf_token %}
+    <table>
+      {{ formset.management_form }} {% for form in formset %}
+      <tr>
+        <td>{{ form.as_p }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <button type="submit">Submit Purchases</button>
+  </form>
+</div>
+{% endblock %}
