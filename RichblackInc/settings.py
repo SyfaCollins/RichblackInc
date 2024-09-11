@@ -104,7 +104,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 DATABASES = {
-    'default': dj_database_url.parse(env('DEVELOPMENT_DATABASE_URL'))
+    'default': dj_database_url.parse(env('PRODUCTION_DATABASE_URL'))
 }
 
 
